@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campus Spark</title>
+  <style>
+    * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      min-height: 100vh;
+    }
+    header {
+      text-align: center;
+      padding: 30px 15px;
+    }
+    header h1 { margin: 0; font-size: 2.5rem; }
+    header p { opacity: 0.9; }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: #ffffff;
+      color: #333;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    .card h2 { margin-top: 0; }
+
+    /* Inspiration wall */
+    .quote {
+      font-style: italic;
+      text-align: center;
+      font-size: 1.2rem;
+    }
+
+    button {
+      background: #667eea;
+      border: none;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    button:hover { opacity: 0.9; }
+
+    /* Form */
+    form input, form textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0 15px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    /* Ideas grid */
+    .ideas {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+    }
+
+    .idea-card {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      background: #f9f9f9;
+    }
+
+    .idea-card h3 { margin-top: 0; }
+
+    .like {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Campus Spark</h1>
+    <p>One Idea Can Change Everything</p>
+  </header>
+
+  <div class="container">
+
+    <!-- Inspiration Wall -->
+    <div class="card">
+      <h2>Inspiration Wall</h2>
+      <p class="quote" id="quote"></p>
+      <div style="text-align:center; margin-top:10px;">
+        <button onclick="newQuote()">Get Inspired</button>
+      </div>
+    </div>
+
+    <!-- Daily Challenge -->
+    <div class="card">
+      <h2>Daily Hackathon Challenge</h2>
+      <p id="challenge"></p>
+      <button onclick="newChallenge()">Generate Challenge</button>
+    </div>
+
+    <!-- Submit Idea -->
+    <div class="card">
+      <h2>Submit Your Idea</h2>
+      <form id="ideaForm">
+        <input type="text" id="title" placeholder="Idea Title" required />
+        <textarea id="problem" rows="3" placeholder="Problem Statement" required></textarea>
+        <textarea id="solution" rows="3" placeholder="Proposed Solution" required></textarea>
+        <button type="submit">Submit Idea</button>
+      </form>
+    </div>
+
+    <!-- Ideas List -->
+    <div class="card">
+      <h2>Student Ideas</h2>
+      <div class="ideas" id="ideas"></div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>Built with HTML, CSS & JavaScript | Hackathon Project</p>
+  </footer>
+
+  <script>
+    const quotes = [
+      "Start where you are. Use what you have. Do what you can.",
+      "Every great idea begins with a small spark.",
+      "Hack the problem, not the people.",
+      "Innovation distinguishes leaders from followers.",
+      "Your code can change lives."
+    ];
+
+    const challenges = [
+      "Build a solution for student mental health.",
+      "Create an app to reduce plastic usage.",
+      "Design a tool to help slow learners.",
+      "Solve a problem faced by your own campus.",
+      "Build something that helps your local community."
+    ];
+
+    function newQuote() {
+      const q = quotes[Math.floor(Math.random() * quotes.length)];
+      document.getElementById("quote").innerText = q;
+    }
+
+    function newChallenge() {
+      const c = challenges[Math.floor(Math.random() * challenges.length)];
+      document.getElementById("challenge").innerText = c;
+    }
+
+    // Load default
+    newQuote();
+    newChallenge();
+
+    const form = document.getElementById("ideaForm");
+    const ideasDiv = document.getElementById("ideas");
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const title = document.getElementById("title").value;
+      const problem = document.getElementById("problem").value;
+      const solution = document.getElementById("solution").value;
+
+      const ideaCard = document.createElement("div");
+      ideaCard.className = "idea-card";
+
+      let likes = 0;
+
+      ideaCard.innerHTML = `
+        <h3>${title}</h3>
+        <p><strong>Problem:</strong> ${problem}</p>
+        <p><strong>Solution:</strong> ${solution}</p>
+        <div class="like">
+          <button>👍 Like</button>
+          <span>Likes: <span class="count">0</span></span>
+        </div>
+      `;
+
+      const likeBtn = ideaCard.querySelector("button");
+      const countSpan = ideaCard.querySelector(".count");
+
+      likeBtn.addEventListener("click", () => {
+        likes++;
+        countSpan.innerText = likes;
+      });
+
+      ideasDiv.prepend(ideaCard);
+      form.reset();
+    });
+  </script>
+</body>
+</html>
